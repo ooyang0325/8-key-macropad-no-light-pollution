@@ -18,21 +18,21 @@ with open('keys.csv') as csvfile:
     for row in csvreader:
         keys.append(row)
 
-column_pins = (board.GP6, board.GP7, board.GP8, board.GP9)
-row_pins = (board.GP5, board.GP4, board.GP3, board.GP2, board.GP1)
+column_pins = (board.GP11, board.GP10, board.GP9)
+row_pins = (board.GP14, board.GP13, board.GP12)
 sense_matrix = SenseMatrix(row_pins, column_pins)
-
-led = digitalio.DigitalInOut(board.LED)
-led.direction = digitalio.Direction.OUTPUT
 
 print('Done pin initialization')
 
 keyboard = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(keyboard)
-num = NumMatrix('num.csv', 5, 4)
 
 while True:
     pressed, released = sense_matrix.scan()
     
-    new_pressed, new_shift = num.new_press(pressed)
-    print(new_pressed)
+    print(f"pressed: {pressed}")
+    print(f"released: {released}")
+
+    time.sleep(1)
+#    new_pressed, new_shift = num.new_press(pressed)
+#    print(new_pressed)
