@@ -7,15 +7,20 @@ from key_mapping import KeyMap, ShiftMap
 
 class SenseMatrix:
     def __init__(self, row_pins: tuple, col_pins: tuple):
+
+        # Check for nonzero pin lists.
         assert len(row_pins) > 0, f"The number of rows must be greater than 0."
         assert len(col_pins) > 0, f"The number of columns must be greater than 0."
 
         self.row_num = len(row_pins)
         self.col_num = len(col_pins)
+
+        # Initialize key_states matrix, which is used for storing whether a key is pressed-down.
         self.key_states = []
         for i in range(self.row_num):
             self.key_states.append([False] * self.col_num)
 
+        # Initialize pins. Column pins are set as input with pulldown, row pins are set as output.
         self.rows = []
         self.cols = []
         for i in range(self.row_num):
@@ -29,22 +34,23 @@ class SenseMatrix:
     def scan(self):
         pressed_keys = []
         released_keys = []
+
         for i in range(self.row_num):
-            self.rows[i].value = True
+            self.rows[i].value = True           # Switch a row to high to scan.
 
             for j in range(self.col_num):
-                previous_key_state = self.key_states[i][j]
-                this_key_state = self.cols[j].value
+                previous_key_state = self.key_states[i][j]          # Store the previous key state to compare later.
+                this_key_state = self.cols[j].value                 # Read the current key state.
 
-                if this_key_state and (not previous_key_state):
+                if this_key_state and (not previous_key_state):     # Just pressed.
                     pressed_keys.append([i, j])
 
-                elif (not this_key_state) and previous_key_state:
+                elif (not this_key_state) and previous_key_state:   # Just released.
                     released_keys.append([i, j])
 
-                self.key_states[i][j] = this_key_state
+                self.key_states[i][j] = this_key_state              # Store the current key state for comparison in the next scan.
 
-            self.rows[i].value = False
+            self.rows[i].value = False          # Switch the row to low.
 
         return pressed_keys, released_keys
 
