@@ -11,15 +11,8 @@ from adafruit_hid.keycode import Keycode
 from key_matrix import SenseMatrix, NumMatrix
 from key_mapping import KeyMap
 
-keys = []
-with open('keys.csv') as csvfile:
-    csvreader = csv.reader(csvfile)
-
-    for row in csvreader:
-        keys.append(row)
-
 column_pins = (board.GP11, board.GP10, board.GP9)
-row_pins = (board.GP14, board.GP13, board.GP12)
+row_pins = (board.GP14, board.GP12, board.GP13)
 sense_matrix = SenseMatrix(row_pins, column_pins)
 
 print('Done pin initialization')
