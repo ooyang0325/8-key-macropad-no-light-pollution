@@ -8,3 +8,4 @@ The files to put in the CitcuitPython directory is located inside the **source**
 ## Limitations
 1. Due to the USB-HID protocol, at most **6 keys** can be pressed at once. Modifier keys(CTRL, SHIFT, ALT, GUI) are not counted in the 6 keys as they use the Modifier byte in the input report.
 2. The effect of pressing shift will affect every key pressed at that moment. For example, if we press "g" first, then press "!" will result in "G" and "!" in the output. Because "!" is actually "SHIFT" + "1", the "g" will become "G" due to pressing shift by another key.
+![1654238728052](https://user-images.githubusercontent.com/52309935/171801701-f0228002-cdf0-44e8-84c7-5621b14ae018.png)
