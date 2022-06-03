@@ -8,7 +8,7 @@ from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 from adafruit_hid.keycode import Keycode
 
-from key_matrix import SenseMatrix, NumMatrix
+from key_matrix import SenseMatrix, KeyMatrix
 from key_mapping import KeyMap
 
 column_pins = (board.GP11, board.GP10, board.GP9)
@@ -20,11 +20,15 @@ print('Done pin initialization')
 keyboard = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(keyboard)
 
+key_matrix = KeyMatrix("keys.csv", sense_matrix.row_num, sense_matrix.col_num)
+print(key_matrix.modes)
+print(key_matrix.discriptions)
+
 while True:
     pressed, released = sense_matrix.scan()
     
-    print(f"pressed: {pressed}")
-    print(f"released: {released}")
+#    print(f"pressed: {pressed}")
+#    print(f"released: {released}")
 
     time.sleep(1)
 #    new_pressed, new_shift = num.new_press(pressed)

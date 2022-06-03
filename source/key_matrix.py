@@ -55,6 +55,29 @@ class SenseMatrix:
         return pressed_keys, released_keys
 
 
+class KeyMatrix:
+    def __init__(self, filename: str, row_num: int, col_num: int):
+
+        # Check for greater than 0 number of rows and columns.
+        assert row_num > 0, f"The number of rows must be greater than 0."
+        assert col_num > 0, f"The number of rows must be greater than 0."
+
+        # Assign attributes.
+        self.row_num = row_num
+        self.col_num = col_num
+        self.modes = []
+        self.discriptions = []
+
+        # Load the mode and decription from file.
+        with open(filename) as csvfile: 
+            lines = list(csv.reader(csvfile))
+
+            for i, line in enumerate(lines):
+                if i % 2 == 0:
+                    self.modes.append(line)
+                else:
+                    self.discriptions.append(line)
+
 class NumMatrix:
     def __init__(self, filename: str, row_num: int, col_num: int):
         assert row_num > 0, f"The number of rows must be greater than 0."
