@@ -15,21 +15,42 @@ column_pins = (board.GP11, board.GP10, board.GP9)
 row_pins = (board.GP14, board.GP12, board.GP13)
 sense_matrix = SenseMatrix(row_pins, column_pins)
 
-print('Done pin initialization')
-
 keyboard = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(keyboard)
 
 key_matrix = KeyMatrix("keys.csv", sense_matrix.row_num, sense_matrix.col_num)
-print(key_matrix.modes)
-print(key_matrix.discriptions)
 
 while True:
     pressed, released = sense_matrix.scan()
     
-#    print(f"pressed: {pressed}")
-#    print(f"released: {released}")
+    for p in pressed:
+        i = p[0]
+        j = p[1]
 
-    time.sleep(1)
-#    new_pressed, new_shift = num.new_press(pressed)
-#    print(new_pressed)
+        this_mode = key_matrix.get_mode(i, j)
+        if this_mode in (1, 2, 4):
+            keyboard.release_all()
+
+            these_keys = key_matrix.get_macro(i, j)
+            keyboard.press(*these_keys)
+
+            if this_mode == 1:
+                keyboard.release_all()
+
+        if this_mode == 3:
+            keyboard.release_all()
+
+            these_keys = key_matrix.get_str(i, j)
+            t = 0
+            while t < len(these_keys):
+                if these_keys[t] == KeyMap["SHIFT"]:
+                    keyboard.press(KeyMap["SHIFT"])
+                    t += 1
+
+                keyboard.press(these_keys[t])
+                keyboard.release_all()
+
+                t += 1
+
+    for r in released:
+        keyboard.release_all()
