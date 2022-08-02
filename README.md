@@ -18,3 +18,7 @@ The files to put in the CitcuitPython directory is located inside the **source**
 2. **Press and hold**: When a switch is pressed, the corresponding macro keys will be pressed down in order and held down until the switch is released or another switch is pressed.
 3. **Send string**: As the name implies, mode 3 will send a corresponding string once when the switch is pressed.
 4. **Rapid press**: When a switch is pressed down the corresponding macro keys will fire at a given rate.
+
+## Project status
+1. Only modes 0~3 are implemented.
+2. The software cannot read certain characters such as comma(,), double-quote(") due to how Excel save these characters in CSV files.
