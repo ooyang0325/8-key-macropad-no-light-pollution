@@ -18,7 +18,13 @@ sense_matrix = SenseMatrix(row_pins, column_pins)
 keyboard = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(keyboard)
 
-key_matrix = KeyMatrix("keys.csv", sense_matrix.row_num, sense_matrix.col_num)
+key_matrix = KeyMatrix("test.csv", sense_matrix.row_num, sense_matrix.col_num)
+"""
+for i in range(sense_matrix.row_num):
+    for j in range(sense_matrix.col_num):
+        print(i, j)
+        print(key_matrix.get_mode(i, j))
+"""
 
 while True:
     pressed, released = sense_matrix.scan()
@@ -28,16 +34,16 @@ while True:
         j = p[1]
 
         this_mode = key_matrix.get_mode(i, j)
-        if this_mode in (1, 2, 4):
+        if this_mode in ('1', '2', '4'):
             keyboard.release_all()
 
             these_keys = key_matrix.get_macro(i, j)
             keyboard.press(*these_keys)
 
-            if this_mode == 1:
+            if this_mode == '1':
                 keyboard.release_all()
 
-        if this_mode == 3:
+        if this_mode == '3':
             keyboard.release_all()
 
             these_keys = key_matrix.get_str(i, j)

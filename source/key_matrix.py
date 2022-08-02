@@ -91,29 +91,32 @@ class KeyMatrix:
 
         # Load the mode and decription from file.
         descriptions = []
-        with open(filename) as csvfile: 
-            lines = list(csv.reader(csvfile))
+        txtfile = open(filename, 'r')
+        for i in range(2 * row_num):
+            line = txtfile.readline()
+            print(line)
 
-            for i, line in enumerate(lines):
-                if i % 2 == 0:
-                    self._modes.append([int(l) for l in line])
-                else:
-                    descriptions.append(line)
+            if i % 2 == 0:
+                self._modes.append(line.split(','))
+                self._modes[i // 2][-1] = self._modes[i // 2][-1][:-1] 
+            else:
+                if line.count(',') == 2:
+                    descriptions.append(line.split(','))
+                    descriptions[i // 2][-1] = descriptions[i // 2][-1][:-1]
+                else :
+                    pass
 
         # Decode the key descriptions.
         for i in range(row_num):
             for j in range(col_num):
-                # Remove the double quotes at the beginning and end of the text.
-                descriptions[i][j] = descriptions[i][j][1 : -1]
-
                 # Break out the macro keys to press.
-                if self._modes[i][j] in (1, 2, 4):
+                if self._modes[i][j] in ('1', '2', '4'):
                     keys = descriptions[i][j].split('-+-')
                     for key in keys:
                         self._macro_map[i][j].append(KeyMap[key])
 
                 # Write the strings into str_map.
-                if self._modes[i][j] == 3:
+                if self._modes[i][j] == '3':
                     for char in descriptions[i][j]:
                         try:
                             self._str_map[i][j].append(KeyMap[char])
