@@ -77,12 +77,14 @@ class KeyMatrix:
         self._col_num = col_num
         self._modes = []
 
+        # Initialise map of macros as an empty 2D list.
         self._macro_map = []
         for i in range(self._row_num):
             self._macro_map.append([])
             for j in range(self._col_num):
                 self._macro_map[i].append([])
 
+        # Initialise map of strings as an empty 2D list.
         self._str_map = []
         for i in range(self._row_num):
             self._str_map.append([])
@@ -90,19 +92,23 @@ class KeyMatrix:
                 self.str_map[i].append([])
 
         # Load the mode and decription from file.
-        descriptions = []
         txtfile = open(filename, 'r')
+        # Temporary list to store the description and process later.
+        descriptions = []
         for i in range(2 * row_num):
             line = txtfile.readline()
-            print(line)
+#            print(line)
 
+            # If the current line is a mode line, add it into the mode list.
             if i % 2 == 0:
                 self._modes.append(line.split(','))
-                self._modes[i // 2][-1] = self._modes[i // 2][-1][:-1] 
+                self._modes[i // 2][-1] = self._modes[i // 2][-1][:-1]          # Remove the \n at the end of the line.
+            # If the current line is a description line, add it into the description temporary list.
             else:
+                # Before using comma(,) to split the line, check if there are commas used in the description.
                 if line.count(',') == 2:
                     descriptions.append(line.split(','))
-                    descriptions[i // 2][-1] = descriptions[i // 2][-1][:-1]
+                    descriptions[i // 2][-1] = descriptions[i // 2][-1][:-1]          # Remove the \n at the end of the line.
                 else :
                     pass
 
