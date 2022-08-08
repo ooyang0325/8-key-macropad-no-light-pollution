@@ -116,7 +116,7 @@ class KeyMatrix:
             for j in range(col_num):
                 # Break out the macro keys to press.
                 if self._modes[i][j] in ('1', '2', '4'):
-                    keys = descriptions[i][j].split('-+-')
+                    keys = descriptions[i][j].split('++')
                     for key in keys:
                         self._macro_map[i][j].append(KeyMap[key])
 
