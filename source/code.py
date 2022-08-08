@@ -1,5 +1,4 @@
 import board
-import circuitpython_csv as csv
 import digitalio
 import time
 import usb_hid
@@ -18,7 +17,7 @@ sense_matrix = SenseMatrix(row_pins, column_pins)
 keyboard = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(keyboard)
 
-key_matrix = KeyMatrix("test.csv", sense_matrix.row_num, sense_matrix.col_num)
+key_matrix = KeyMatrix("keys.csv", sense_matrix.row_num, sense_matrix.col_num)
 """
 for i in range(sense_matrix.row_num):
     for j in range(sense_matrix.col_num):

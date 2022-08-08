@@ -1,5 +1,4 @@
 import board
-import circuitpython_csv as csv
 import digitalio
 
 from key_mapping import KeyMap, ShiftMap
