@@ -104,55 +104,48 @@ class KeyMatrix:
                 self._modes.append(line.split(','))
             # If the current line is a description line, add it into the description temporary list.
             else:
-                comma_num = line.count(',')
-                dquote_num = line.count('"')
-                # Before using comma(,) to split the line, check if there are commas used in the description.
-                if comma_num == 2:
-                    # No comma used in the description.
-                    descriptions.append(line.split(','))
-                else:
-                    # Commas are used in the description.
-                    splits = []
-                    start_pos = 0
+                # Add the description line to the discription list.
+                splits = []
+                start_pos = 0
 
-                    # Find the commas used for separation.
-                    for j, char in enumerate(line):
-                        if char == ',':
-                            end_pos = j
-                            # There will be an even number of double quotes between two commas used for separation.
-                            if line.count('"', start_pos, end_pos) % 2 == 0:
-                                splits.append(end_pos)              # Store the position of the comma.
-                                start_pos = end_pos
+                # Find the commas used for separation.
+                for j, char in enumerate(line):
+                    if char == ',':
+                        end_pos = j
+                        # There will be an even number of double quotes between two commas used for separation.
+                        if line.count('"', start_pos, end_pos) % 2 == 0:
+                            splits.append(end_pos)              # Store the position of the comma.
+                            start_pos = end_pos
+                    else:
+                        pass
+
+                # Add a new row of descriptions.
+                descriptions.append([])
+                # Add the first cell from the begin of the line to the first separation comma.
+                descriptions[r].append(line[:splits[0]])
+                # Add the other cells.
+                for j in range(col_num - 2):
+                    # The content of the cells start after the comma and before the next comma(for separation).
+                    descriptions[r].append(line[splits[j] + 1 : splits[j + 1]])
+                # Add the last cell from the last separation comma to the end of the line.
+                descriptions[r].append(line[splits[-1] + 1:])
+                
+                # Process the raw description data so that the decode part of the code can understand.
+                for j in range(col_num):
+                    description = descriptions[r][j]
+                    # Remove the first and last double quote if they exist.
+                    if description[0] == '"' and description[-1] == '"':
+                        description = description[1:-1]
+
+                    k = 0
+                    while k < len(description):
+                        # Remove of the the double double quotes when encountered.
+                        if description[k:k+2] == '""':
+                            description = description[:k] + description[k+1:]
+                            k += 1
                         else:
-                            pass
-
-                    # Add a new row of descriptions.
-                    descriptions.append([])
-                    # Add the first cell from the begin of the line to the first separation comma.
-                    descriptions[r].append(line[:splits[0]])
-                    # Add the other cells.
-                    for j in range(col_num - 2):
-                        # The content of the cells start after the comma and before the next comma(for separation).
-                        descriptions[r].append(line[splits[j] + 1 : splits[j + 1]])
-                    # Add the last cell from the last separation comma to the end of the line.
-                    descriptions[r].append(line[splits[-1] + 1:])
-                    
-                    # Process the raw description data so that the decode part of the code can understand.
-                    for j in range(col_num):
-                        description = descriptions[r][j]
-                        # Remove the first and last double quote if they exist.
-                        if description[0] == '"' and description[-1] == '"':
-                            description = description[1:-1]
-
-                        k = 0
-                        while k < len(description):
-                            # Remove of the the double double quotes when encountered.
-                            if description[k:k+2] == '""':
-                                description = description[:k] + description[k+1:]
-                                k += 1
-                            else:
-                                k += 1
-                        descriptions[r][j] = description
+                            k += 1
+                    descriptions[r][j] = description
 
         # Decode the key descriptions.
         for i in range(row_num):
