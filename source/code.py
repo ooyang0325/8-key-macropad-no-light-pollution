@@ -18,12 +18,6 @@ keyboard = Keyboard(usb_hid.devices)
 layout = KeyboardLayoutUS(keyboard)
 
 key_matrix = KeyMatrix("keys.csv", sense_matrix.row_num, sense_matrix.col_num)
-"""
-for i in range(sense_matrix.row_num):
-    for j in range(sense_matrix.col_num):
-        print(i, j)
-        print(key_matrix.get_mode(i, j))
-"""
 
 while True:
     pressed, released = sense_matrix.scan()
@@ -48,8 +42,8 @@ while True:
             these_keys = key_matrix.get_str(i, j)
             t = 0
             while t < len(these_keys):
-                if these_keys[t] == KeyMap["SHIFT"]:
-                    keyboard.press(KeyMap["SHIFT"])
+                if these_keys[t] == KeyMap["Shift"]:
+                    keyboard.press(KeyMap["Shift"])
                     t += 1
 
                 keyboard.press(these_keys[t])

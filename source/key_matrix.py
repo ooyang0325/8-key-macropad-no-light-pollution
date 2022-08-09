@@ -169,7 +169,7 @@ class KeyMatrix:
                         try:
                             self._str_map[i][j].append(KeyMap[char])
                         except KeyError:
-                            self._str_map[i][j].append(KeyMap["SHIFT"])
+                            self._str_map[i][j].append(KeyMap["Shift"])
                             self._str_map[i][j].append(ShiftMap[char])
 
 
