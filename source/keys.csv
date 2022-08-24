@@ -1,6 +1,6 @@
-1,0,2
-Esc,0,Shift++F10
-2,3,3
-s++d,\n,""","""
-3,1,1
-Hello,',p
+4,0,3
+Esc,0,https://www.youtube.com/watch?v=dQw4w9WgXcQ
+1,2,1
+Ctrl++c,Up,Ctrl++v
+2,2,2
+Left,Down,Right
