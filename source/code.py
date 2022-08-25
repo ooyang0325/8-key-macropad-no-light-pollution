@@ -9,6 +9,7 @@ from adafruit_hid.keycode import Keycode
 
 from key_matrix import SenseMatrix, KeyMatrix
 from key_mapping import KeyMap, ShiftMap
+from light_pollution import PIO_RGB
 
 # Set the pins used for the columns and rows of the sense matrix on the PCB.
 column_pins = (board.GP11, board.GP10, board.GP9)
@@ -23,6 +24,11 @@ layout = KeyboardLayoutUS(keyboard)
 key_matrix = KeyMatrix("keys.csv", sense_matrix.row_num, sense_matrix.col_num)
 press_num = [0] * 231
 spam = []
+
+# Initialise the RGB LED.
+RGB = PIO_RGB(board.GP16)
+RGB.connect()
+RGB.set_colour(0, 0, 0)
 
 
 # The press routine checks for keys that need to be pressed and have not been pressed.
@@ -74,6 +80,14 @@ while True:
             these_keys = key_matrix.get_str(i, j)
             t = 0
             while t < len(these_keys):
+                # Flash RGB LED when printing out characters.
+                if (c := t % 9) in (0, 1, 2):
+                    RGB.set_colour(10, 0, 0)
+                elif c in (3, 4, 5):
+                    RGB.set_colour(0, 10, 0)
+                else:
+                    RGB.set_colour(0, 0, 10)
+
                 # If shifting is needed, press shift and the next key.
                 if these_keys[t] == KeyMap["Shift"]:
                     keyboard.press(KeyMap["Shift"])
@@ -85,11 +99,15 @@ while True:
 
                 t += 1
 
+            # Disconnect RGB.
+            RGB.set_colour(0, 0, 0)
+
         # Mode 4 -> spam a set of macro keys
         if this_mode == '4':
             these_keys = key_matrix.get_macro(i, j)
             # Set the keys to spam.
             spam = sorted(these_keys)
+            s = 0
 
     for r in released:
         i = r[0]
@@ -109,9 +127,15 @@ while True:
         if this_mode == '4':
             # Remove the keys for spamming.
             spam = []
+            RGB.set_colour(0, 0, 0)
 
     # Spam the keys every loop if there is keys to spam.        
     if len(spam) > 0:
+        if s % 5 == 0:
+            RGB.set_colour(0, 25, 0)
         press_routine(reversed(spam))
         time.sleep(0.01)
         release_routine(spam)
+        if s % 5 == 2:
+            RGB.set_colour(0, 0, 0)
+        s += 1
