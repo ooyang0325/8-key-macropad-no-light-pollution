@@ -29,4 +29,4 @@ The files to put in the CitcuitPython directory is located inside the **source**
 4. **Rapid press**: When a switch is pressed down the corresponding macro keys will fire at a given rate.
 
 ## Project status
-1. Only modes 0~3 are implemented.
+1. All modes implemented.
